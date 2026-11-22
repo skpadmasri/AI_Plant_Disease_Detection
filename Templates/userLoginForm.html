@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Plant Disease Identification</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Roboto Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link href="static/css/style.css" rel="stylesheet">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <canvas id="particles"></canvas>
+
+    <!-- Original 3D Animated Leaf -->
+    <div class="leaf-container">
+        <div class="leaf">
+            <div class="front"><i class="fas fa-leaf"></i></div>
+            <div class="back"><i class="fas fa-leaf"></i></div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Needle-like Leaf -->
+    <div class="needle-container">
+        <div class="needle">
+            <div class="front"><i class="fas fa-leaf"></i></div>
+            <div class="back"><i class="fas fa-leaf"></i></div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Lobed Leaf -->
+    <div class="lobed-container">
+        <div class="lobed">
+            <div class="front"></div>
+            <div class="back"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo"><i class="fas fa-leaf mr-2"></i>AI-Powered Plant Disease Identification</a>
+            <div class="menu-toggle" id="mobileMenu">☰</div>
+            <div class="nav-menu" id="navMenu">
+                <a href="/" class="nav-btn"><i class="fas fa-home mr-1"></i>Home</a>
+                <a href="userLoginForm" class="nav-btn"><i class="fas fa-user mr-1"></i>User</a>
+                <a href="adminLoginForm" class="nav-btn"><i class="fas fa-user-shield mr-1"></i>Admin</a>
+                <a href="userRegisterForm" class="nav-btn"><i class="fas fa-user-plus mr-1"></i>Register</a>
+                <a href="#about" class="nav-btn"><i class="fas fa-info-circle mr-1"></i>About Us</a>
+            </div>
+        </div>
+    </nav>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br>
+    <!-- Hero Section with User Login Form -->
+    <main class="main-content">
+        <h1>User Login</h1>
+        <p>Access your account to view your transplant profile and updates.</p>
+        <ul class="messages">
+            {% if messages %}
+            <ul class="messages" style="list-style: none; padding: 0;">
+                {% for message in messages %}
+                <li style="margin: 10px 0; padding: 12px; border-radius: 5px; 
+                       color: white; 
+                       background-color:black">
+                    {{ message }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </ul>
+        <section>
+            <h2><i class="fas fa-user"></i> User Sign In</h2>
+            <form class="login-form" method="post" action="userLoginCheck">
+                {% csrf_token %}
+                <div>
+                    <label for="userUsername">Username</label>
+                    <input type="text" id="userUsername" name="userUsername" placeholder="Enter your username" required>
+                </div>
+                <div>
+                    <label for="userPassword">Password</label>
+                    <input type="password" id="userPassword" name="userPassword" placeholder="Enter your password"
+                        required>
+                </div>
+                <button type="submit">User Login</button>
+            </form>
+        </section>
+    </main>
+    <style>
+    .main-content {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 40px;
+            background-color: rgb(239, 176, 255);
+            border-radius: 20px;
+            text-align: center; 
+            position: relative;
+            color: rgb(7, 6, 5);
+            z-index: 1;
+        }
+
+        .main-content h1 {
+            font-size: 2.5rem;
+            color: #000000;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(9, 10, 10, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .main-content p {
+            font-size: 1rem;
+            color: #030304;
+            margin-bottom: 30px;
+        }
+
+        section h2 {
+            font-size: 1.6rem;
+            color: #020303;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 8px rgba(0, 0, 1, 0.5);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .login-form div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-form label {
+            color: #020101;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .login-form input {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            background: #f4f1f1;
+            color: #f5f5f5;
+            font-size: 1rem;
+            box-shadow: inset 0 0 10px rgba(64, 196, 255, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(64, 196, 255, 0.6);
+        }
+
+        .login-form button {
+            margin-top: 10px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background: #02fc9c;
+            color: #0a1d37;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 77, 64, 0.5);
+        }
+
+        .login-form button:hover {
+            background: #eb0c00;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 183, 235, 0.8);
+        }
+
+        /* Django messages styling */
+        ul.messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        ul.messages li {
+            color: #ff6f91;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 4px solid #ff6f91;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+    </style>
+    <br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br>
+
+    <!-- Footer -->
+    <footer class="footer-gradient">
+        <div class="footer-container">
+            <p>© 2025 PlantDiseaseAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navMenu = document.getElementById('navMenu');
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Particle Animation
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const numberOfParticles = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = ['#F1C40F', '#27AE60', '#E74C3C', '#3498DB'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.05;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.2) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                    particlesArray.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Resize Canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+    </script>
+</body>
+
+</html>

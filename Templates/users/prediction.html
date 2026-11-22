@@ -1,0 +1,497 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Plant Disease Identification - Prediction</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Roboto Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Static CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+
+
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: #FFF;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .section-card {
+            background: rgba(44, 62, 80, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-card h2 {
+            font-size: 2rem;
+            color: #F1C40F;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+        }
+
+        .section-card p {
+            font-size: 1.2rem;
+            color: #ECF0F1;
+            margin-bottom: 20px;
+        }
+
+        .image-upload {
+            margin-bottom: 20px;
+        }
+
+        .image-upload input[type="file"] {
+            display: none;
+        }
+
+        .image-upload label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #27AE60, #2ECC71);
+            color: #FFF;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload label:hover {
+            background: linear-gradient(45deg, #E74C3C, #C0392B);
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            display: block;
+        }
+
+        .error-message {
+            color: #E74C3C;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #27AE60, #2ECC71);
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(45deg, #E74C3C, #C0392B);
+        }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 100%;
+            display: none;
+        }
+
+        .chatbot-container.active {
+            display: block;
+        }
+
+        .chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.5rem;
+            color: #F1C40F;
+        }
+
+        .chatbot-toggle {
+            background: none;
+            border: none;
+            color: #FFF;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .chatbot-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+
+        .chatbot-message.user {
+            background: linear-gradient(45deg, #3498DB, #2980B9);
+            margin-left: auto;
+            color: #FFF;
+        }
+
+        .chatbot-message.bot {
+            background: linear-gradient(45deg, #27AE60, #2ECC71);
+            margin-right: auto;
+            color: #FFF;
+        }
+
+        .chatbot-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #ECF0F1;
+            color: #2C3E50;
+            font-size: 1rem;
+        }
+
+        .chatbot-input button {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #F1C40F, #E67E22);
+            color: #FFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-input button:hover {
+            background: linear-gradient(45deg, #E74C3C, #C0392B);
+        }
+
+        /* Footer */
+        .footer-gradient {
+            background: linear-gradient(180deg, #2A6F2F, #27AE60);
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #ECF0F1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: rgba(44, 62, 80, 0.95);
+                padding: 20px;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .leaf-container, .needle-container, .lobed-container {
+                display: none;
+            }
+
+            .section-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .section-card p {
+                font-size: 1rem;
+            }
+
+            .preview-image {
+                max-height: 200px;
+            }
+
+            .chatbot-messages {
+                max-height: 200px;
+            }
+
+            .chatbot-header h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particles"></canvas>
+
+    <!-- Original 3D Animated Leaf -->
+    <div class="leaf-container">
+        <div class="leaf">
+            <div class="front"><i class="fas fa-leaf"></i></div>
+            <div class="back"><i class="fas fa-leaf"></i></div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Needle-like Leaf -->
+    <div class="needle-container">
+        <div class="needle">
+            <div class="front"><i class="fas fa-leaf"></i></div>
+            <div class="back"><i class="fas fa-leaf"></i></div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Lobed Leaf -->
+    <div class="lobed-container">
+        <div class="lobed">
+            <div class="front"></div>
+            <div class="back"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+ <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo"><i class="fas fa-leaf mr-2"></i>AI-Powered Plant Disease Identification</a>
+            <div class="menu-toggle" id="mobileMenu" role="button" aria-expanded="false" tabindex="0">☰</div>
+            <div class="nav-menu" id="navMenu">
+                <a href="userHome" class="nav-btn"><i class="fas fa-home mr-1"></i>Home</a>
+                <a href="training" class="nav-btn"><i class="fas fa-book mr-1"></i>Training</a>
+                <a href="prediction" class="nav-btn"><i class="fas fa-chart-line mr-1"></i>Prediction</a>
+                <a href="Ulog" class="nav-btn"><i class="fas fa-sign-out-alt mr-1"></i>Logout</a>
+                <a href="#about" class="nav-btn"><i class="fas fa-info-circle mr-1"></i>About Us</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 100px;">
+        <section class="section-card">
+            <h2>Upload Leaf Image for Disease Prediction</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="image-upload">
+                    <label for="image-upload">Choose Image</label>
+                    <input type="file" id="image-upload" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="cta-button">Predict Disease</button>
+            </form>
+
+            {% if image_url %}
+                <img src="{{ image_url }}" alt="Uploaded Leaf" class="preview-image">
+                {% if predicted_class %}
+                    <p><strong>Predicted Disease:</strong> {{ predicted_class }}</p>
+                    <p><strong>Confidence:</strong> {{ confidence|floatformat:2 }}</p>
+                    <!-- Chatbot Interface -->
+                    <div class="chatbot-container {% if predicted_class %}active{% endif %}">
+                        <div class="chatbot-header">
+                            <h3>Ask About {{ predicted_class }}</h3>
+                            <button class="chatbot-toggle" onclick="toggleChatbot()">−</button>
+                        </div>
+                        <div class="chatbot-messages" id="chatbotMessages"></div>
+                        <div class="chatbot-input">
+                            <input type="text" id="chatbotInput" placeholder="Ask a question about {{ predicted_class }}..." aria-label="Chatbot input">
+                            <button onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
+        </section>
+    </div>
+
+   
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navMenu = document.getElementById('navMenu');
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const isExpanded = navMenu.classList.contains('active');
+            mobileMenu.setAttribute('aria-expanded', isExpanded);
+        });
+
+        // Active Link Highlight
+        const navLinks = document.querySelectorAll('.nav-btn');
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === window.location.pathname || href === '{% url "prediction" %}') {
+                link.classList.add('active');
+            }
+        });
+
+        // Particle Animation
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const numberOfParticles = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = ['#F1C40F', '#27AE60', '#E74C3C', '#3498DB'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.05;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.2) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                    particlesArray.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Resize Canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        // Chatbot Functionality
+        function toggleChatbot() {
+            const chatbotContainer = document.querySelector('.chatbot-container');
+            const toggleButton = document.querySelector('.chatbot-toggle');
+            chatbotContainer.classList.toggle('active');
+            toggleButton.textContent = chatbotContainer.classList.contains('active') ? '−' : '+';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const messages = document.getElementById('chatbotMessages');
+            const message = input.value.trim();
+            const predictedClass = '{{ predicted_class|escapejs }}';
+
+            if (!message) return;
+
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chatbot-message user';
+            userMessage.textContent = message;
+            messages.appendChild(userMessage);
+            messages.scrollTop = messages.scrollHeight;
+
+            // Clear input
+            input.value = '';
+
+            try {
+                const response = await fetch('{% url "chatbot" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ message, predicted_class: predictedClass })
+                });
+
+                const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Add bot response
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chatbot-message bot';
+                botMessage.textContent = data.response;
+                messages.appendChild(botMessage);
+                messages.scrollTop = messages.scrollHeight;
+            } catch (error) {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'chatbot-message bot';
+                errorMessage.textContent = 'Sorry, something went wrong. Please try again.';
+                messages.appendChild(errorMessage);
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        // Handle Enter key for sending messages
+        document.getElementById('chatbotInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Plant Disease Identification</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Roboto Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link href="static/css/style.css" rel="stylesheet">
+    <style>
+     
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <canvas id="particles"></canvas>
+
+    <!-- Original 3D Animated Leaf -->
+    <div class="leaf-container">
+        <div class="leaf">
+            <div class="front"><i class="fas fa-leaf"></i></div>
+            <div class="back"><i class="fas fa-leaf"></i></div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Needle-like Leaf -->
+    <div class="needle-container">
+        <div class="needle">
+            <div class="front"><i class="fas fa-leaf"></i></div>
+            <div class="back"><i class="fas fa-leaf"></i></div>
+        </div>
+    </div>
+
+    <!-- 3D Animated Lobed Leaf -->
+    <div class="lobed-container">
+        <div class="lobed">
+            <div class="front"></div>
+            <div class="back"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo"><i class="fas fa-leaf mr-2"></i>AI-Powered Plant Disease Identification</a>
+            <div class="menu-toggle" id="mobileMenu">☰</div>
+            <div class="nav-menu" id="navMenu">
+                <a href="/" class="nav-btn"><i class="fas fa-home mr-1"></i>Home</a>
+                <a href="userLoginForm" class="nav-btn"><i class="fas fa-user mr-1"></i>User</a>
+                <a href="adminLoginForm" class="nav-btn"><i class="fas fa-user-shield mr-1"></i>Admin</a>
+                <a href="userRegisterForm" class="nav-btn"><i class="fas fa-user-plus mr-1"></i>Register</a>
+                <a href="#about" class="nav-btn"><i class="fas fa-info-circle mr-1"></i>About Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1>Plant Disease AI</h1>
+            <p>Protect Your Crops with Advanced Machine Learning</p>
+            <a href="userLoginForm" class="cta-button">Analyze Now</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+ 
+
+    <!-- Footer -->
+    <footer class="footer-gradient">
+        <div class="footer-container">
+            <p>© 2025 PlantDiseaseAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navMenu = document.getElementById('navMenu');
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Particle Animation
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        const numberOfParticles = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = ['#F1C40F', '#27AE60', '#E74C3C', '#3498DB'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.05;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.2) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                    particlesArray.push(new Particle());
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Resize Canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+    </script>
+</body>
+</html>

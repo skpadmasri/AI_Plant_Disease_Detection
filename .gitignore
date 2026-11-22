@@ -1,0 +1,9 @@
+*.pyc 
+__pycache__/ 
+db.sqlite3 
+venv/ 
+env/ 
+.env 
+media/uploads/ 
+.vscode/
+media/New Plant Diseases Dataset(Augmented)/
